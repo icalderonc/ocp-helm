@@ -1,0 +1,65 @@
+Name:         apim260-nfs-server-provisioner-0
+Namespace:    default
+Priority:     0
+Node:         lima-rancher-desktop/192.168.2.174
+Start Time:   Wed, 03 Aug 2022 10:57:47 +0200
+Labels:       app=nfs-server-provisioner
+              chart=nfs-server-provisioner-0.3.0
+              controller-revision-hash=apim260-nfs-server-provisioner-588774b645
+              heritage=Helm
+              release=apim260
+              statefulset.kubernetes.io/pod-name=apim260-nfs-server-provisioner-0
+Annotations:  <none>
+Status:       Running
+IP:           10.42.0.22
+IPs:
+  IP:           10.42.0.22
+Controlled By:  StatefulSet/apim260-nfs-server-provisioner
+Containers:
+  nfs-server-provisioner:
+    Container ID:  containerd://da37b88e7ec5f7732c6b57b1770930966523dc1b2bfa2d47b1a9ba9ced22b35b
+    Image:         quay.io/kubernetes_incubator/nfs-provisioner:v2.2.1-k8s1.12
+    Image ID:      sha256:7ae623806243277c97139fcfd74dc8f1a47a198cebeca6f5f4df509b943151cc
+    Ports:         2049/TCP, 20048/TCP, 111/TCP, 111/UDP
+    Host Ports:    0/TCP, 0/TCP, 0/TCP, 0/UDP
+    Args:
+      -provisioner=cluster.local/apim260-nfs-server-provisioner
+    State:          Running
+      Started:      Wed, 03 Aug 2022 10:57:48 +0200
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      POD_IP:          (v1:status.podIP)
+      SERVICE_NAME:   apim260-nfs-server-provisioner
+      POD_NAMESPACE:  default (v1:metadata.namespace)
+    Mounts:
+      /export from data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-wsqxc (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  data:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  kube-api-access-wsqxc:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  48m   default-scheduler  Successfully assigned default/apim260-nfs-server-provisioner-0 to lima-rancher-desktop
+  Normal  Pulled     48m   kubelet            Container image "quay.io/kubernetes_incubator/nfs-provisioner:v2.2.1-k8s1.12" already present on machine
+  Normal  Created    48m   kubelet            Created container nfs-server-provisioner
+  Normal  Started    48m   kubelet            Started container nfs-server-provisioner
