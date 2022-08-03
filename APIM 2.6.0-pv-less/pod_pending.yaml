@@ -1,0 +1,86 @@
+Name:           wso2am-pattern-1-am-1-deployment-66fd45c98d-nnzrh
+Namespace:      default
+Priority:       0
+Node:           <none>
+Labels:         deployment=wso2am-pattern-1-am
+                node=wso2am-pattern-1-am-1
+                pod-template-hash=66fd45c98d
+Annotations:    <none>
+Status:         Pending
+IP:             
+IPs:            <none>
+Controlled By:  ReplicaSet/wso2am-pattern-1-am-1-deployment-66fd45c98d
+Init Containers:
+  init-apim-db:
+    Image:      busybox:1.31
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      echo -e "Checking for the availability of DBMS service"; while ! nc -z wso2am-mysql-db-service 3306; do sleep 1; printf "-"; done; echo -e "  >> DBMS service is available";
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4jw6t (ro)
+Containers:
+  wso2am-pattern-1-am:
+    Image:       wso2/wso2am:2.6.0
+    Ports:       8280/TCP, 8243/TCP, 9763/TCP, 9443/TCP
+    Host Ports:  0/TCP, 0/TCP, 0/TCP, 0/TCP
+    Limits:
+      cpu:     1
+      memory:  1Gi
+    Requests:
+      cpu:      500m
+      memory:   128Mi
+    Liveness:   exec [/bin/sh -c nc -z localhost 9443] delay=300s timeout=1s period=30s #success=1 #failure=3
+    Readiness:  exec [/bin/sh -c nc -z localhost 9443] delay=300s timeout=1s period=30s #success=1 #failure=3
+    Environment:
+      H2_CARBON_DB_PASSWORD:  <set to the key 'H2_CARBON_DB_PASSWORD' in secret 'wso2am-pattern-1-am-service-db-secret'>  Optional: false
+      H2_CARBON_DB_USERNAME:  <set to the key 'H2_CARBON_DB_USERNAME' in secret 'wso2am-pattern-1-am-service-db-secret'>  Optional: false
+    Mounts:
+      /home/wso2carbon/wso2-config-volume/repository/conf from wso2am-pattern-1-am-1-conf (rw)
+      /home/wso2carbon/wso2-config-volume/repository/conf/datasources from wso2am-pattern-1-am-1-datasources-conf (rw)
+      /home/wso2carbon/wso2am-2.6.0/bin/wso2server.sh from wso2am-pattern-1-am-1-bin (rw,path="wso2server.sh")
+      /home/wso2carbon/wso2am-2.6.0/repository/deployment/server/executionplans from wso2am-pattern-1-storage-volume-executionplans (rw)
+      /home/wso2carbon/wso2am-2.6.0/repository/deployment/server/synapse-configs from wso2am-pattern-1-storage-volume-synapse-configs (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4jw6t (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  wso2am-pattern-1-storage-volume-executionplans:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  wso2am-pattern-1-am-shared-executionplans-volume-claim
+    ReadOnly:   false
+  wso2am-pattern-1-storage-volume-synapse-configs:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  wso2am-pattern-1-am-shared-synapse-configs-volume-claim
+    ReadOnly:   false
+  wso2am-pattern-1-am-1-conf:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      wso2am-pattern-1-am-1-conf
+    Optional:  false
+  wso2am-pattern-1-am-1-bin:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      wso2am-pattern-1-am-1-bin-cm
+    Optional:  false
+  wso2am-pattern-1-am-1-datasources-conf:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      wso2am-pattern-1-am-1-datasources-conf
+    Optional:  false
+  kube-api-access-4jw6t:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age    From               Message
+  ----     ------            ----   ----               -------
+  Warning  FailedScheduling  5m25s  default-scheduler  0/1 nodes are available: 1 pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+  Warning  FailedScheduling  5m23s  default-scheduler  0/1 nodes are available: 1 pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
